@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-
+import axios from "axios";
+import { salvarCookie } from "../utils/token";
+import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [dados, setDados] = useState({});
-  useEffect(() => {
-    console.log(JSON.stringify(dados));
-  }, [dados]);
+  const navigate = useNavigate();
+  useEffect(() => {}, [dados]);
 
-  function captureData(event) {
+  async function captureData(event) {
     event.preventDefault();
 
     const { email, password } = event.target;
-
     if (email.value && password.value) {
       const newDados = {
         ...dados,
@@ -18,6 +18,17 @@ export default function Login() {
         senha: password.value,
       };
       setDados(newDados);
+      try {
+        const { data } = await axios.post(
+          "http://localhost:3000/login",
+          newDados
+        );
+        salvarCookie("authorization", data.token);
+
+        return navigate("/home");
+      } catch (error) {
+        alert(error.response.data.mensagem);
+      }
     } else {
       alert("preencha o email e a senha");
     }
@@ -34,21 +45,26 @@ export default function Login() {
           <div>
             <input
               name="email"
-              className="w-full p-4 text-sm bg-gray-50 focus:outline-none border border-gray-200 rounded text-gray-600"
+              className="w-full p-4 text-sm bg-gray-50 focus:outline-none border
+               border-gray-200 rounded text-gray-600"
               type="text"
               placeholder="Email"
             />
           </div>
           <div>
             <input
-              className="w-full p-4 text-sm bg-gray-50 focus:outline-none border border-gray-200 rounded text-gray-600"
+              className="w-full p-4 text-sm bg-gray-50 focus:outline-none 
+              border border-gray-200 rounded text-gray-600"
               type="text"
               name="password"
               placeholder="Password"
             />
           </div>
           <div>
-            <button className="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded text-sm font-bold text-gray-50 transition duration-200">
+            <button
+              className="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded text-sm font-bold
+             text-gray-50 transition duration-200"
+            >
               Sign In
             </button>
           </div>

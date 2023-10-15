@@ -31,5 +31,4 @@ CREATE TABLE
         tipo TEXT
     );
 
-
-SELECT * from usuarios
+SELECT * from usuarios 
