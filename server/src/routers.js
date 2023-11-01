@@ -16,6 +16,11 @@ const {
   deletarTransacao,
 } = require("./controllers/controllers");
 
+rotas.get("/", (req, res) => {
+  const { authorization } = req.headers;
+  console.log(authorization);
+  res.status(200).json({ message: authorization });
+});
 rotas.post("/usuario", cadastrarUsuario);
 
 rotas.post("/login", logarUsuario);
